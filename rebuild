@@ -1,0 +1,9 @@
+#!/bin/bash
+
+docker build -t flask-api .
+
+docker stop flask
+docker rm flask
+
+docker run -d -p 5000:5000 --name flask flask-api:latest
+docker logs -f flask
