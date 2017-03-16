@@ -25,14 +25,10 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
  
-   # Is this a known user?
-   username = request.cookies.get('username')
+   if 'username' in session:
+     return redirect( url_for( '.hello', name = session['username'] ) )
 
-   if username != 'asshole': 
-     return redirect(url_for('static', filename='login.html') )
-
-   # Known user, say hello.
-   return redirect( url_for( '.hello', name = username ) )
+   return redirect(url_for('static', filename='login.html') )
 
 
 ## ---- login ----------------------------- ##
@@ -50,7 +46,7 @@ def login():
         if username == "greg":
           if request.form['password'] == "greg":
              resp = make_response( redirect( url_for( '.hello', name = username ) ) )
-             resp.set_cookie('username', 'asshole')
+             session['username'] = username
              return resp
         else:
             error = 'Invalid username/password'
@@ -77,7 +73,7 @@ def hello(name=None):
 def logout():
 
    resp = make_response( redirect( url_for( 'static', filename='logout.html' ) ) )
-   resp.set_cookie('username', '', expires=0)
+   session.pop('username', None)
    return resp
 
 
