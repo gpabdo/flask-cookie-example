@@ -134,6 +134,8 @@ def logout():
 #
 ## ---------------------------------------- ##
 if __name__ == "__main__":
+    # More settings: http://flask.pocoo.org/docs/0.12/api/
+
     app.secret_key = os.urandom(24)
     app.debug = False
-    app.run()
+    app.run( host = '0.0.0.0' )
